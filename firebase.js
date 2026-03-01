@@ -14,8 +14,8 @@ const FIREBASE_CONFIG = {
 // ── PIN CONFIG ────────────────────────────────────────────────────
 // Change these to your own 4-digit PINs before deploying
 const PINS = {
-  pavlo:  "1234",   // ← change this
-  olivia: "5678"    // ← change this
+  pavlo:  "2002",
+  olivia: "6767"
 };
 
 // ── APP STATE ─────────────────────────────────────────────────────
