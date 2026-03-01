@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>partner ship</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     LOCK SCREEN
+══════════════════════════════════════════════════════ -->
+<div class="screen active" id="screen-lock">
+
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 48px 32px;">
+    <div class="lock-logo">partner<em>ship</em></div>
+    <div class="lock-tagline">a daily practice for two</div>
+    <div class="lock-divider"></div>
+
+    <!-- Profile selection -->
+    <div id="profile-selection" style="width:100%; max-width:280px;">
+      <div style="font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:var(--moss); text-align:center; margin-bottom:20px;">Who are you?</div>
+      <div class="profile-choice">
+        <button class="profile-btn" onclick="selectUser('pavlo')">
+          <div class="p-name">Pavlo</div>
+          <div class="p-sub">Your personal practice</div>
+        </button>
+        <button class="profile-btn" onclick="selectUser('olivia')">
+          <div class="p-name">Olivia</div>
+          <div class="p-sub">Your personal practice</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- PIN entry -->
+    <div class="pin-screen" id="pin-entry">
+      <div class="pin-label" id="pin-user-label">Pavlo</div>
+      <div class="pin-sub">Enter your PIN</div>
+      <div class="pin-dots">
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+      </div>
+      <div class="pin-pad">
+        <button class="pin-key" onclick="pinKey('1')">1</button>
+        <button class="pin-key" onclick="pinKey('2')">2</button>
+        <button class="pin-key" onclick="pinKey('3')">3</button>
+        <button class="pin-key" onclick="pinKey('4')">4</button>
+        <button class="pin-key" onclick="pinKey('5')">5</button>
+        <button class="pin-key" onclick="pinKey('6')">6</button>
+        <button class="pin-key" onclick="pinKey('7')">7</button>
+        <button class="pin-key" onclick="pinKey('8')">8</button>
+        <button class="pin-key" onclick="pinKey('9')">9</button>
+        <button class="pin-key empty"></button>
+        <button class="pin-key" onclick="pinKey('0')">0</button>
+        <button class="pin-key del" onclick="pinDel()">⌫</button>
+      </div>
+      <div class="pin-error" id="pin-error"></div>
+      <button class="back-btn" onclick="pinBack()">← Back</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     HOME SCREEN
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-home">
+
+  <div class="home-header">
+    <div class="home-greeting" id="home-greeting">Good morning</div>
+    <h1 class="home-name" id="home-name">Pavlo <em>🌿</em></h1>
+    <div class="day-badge" id="day-badge">Day 1 of 30</div>
+  </div>
+
+  <!-- Today's theme -->
+  <div class="theme-card">
+    <div class="theme-label">Today's theme</div>
+    <div class="theme-title" id="theme-title">Returning home</div>
+    <div class="theme-quote" id="theme-quote"></div>
+    <div class="theme-source" id="theme-source"></div>
+  </div>
+
+  <!-- Practice steps -->
+  <div class="section-label">Today's practice</div>
+
+  <div class="practice-item" id="step-reading" onclick="openReading()">
+    <div class="step-num">I</div>
+    <div class="practice-info">
+      <div class="practice-name">Reading</div>
+      <div class="practice-desc">A short passage to sit with before the day begins</div>
+      <div class="practice-time">~15 min</div>
+    </div>
+  </div>
+
+  <div class="practice-item" id="step-journal" onclick="openJournal()">
+    <div class="step-num">II</div>
+    <div class="practice-info">
+      <div class="practice-name">Journal</div>
+      <div class="practice-desc">Write privately, share what you'd like to</div>
+      <div class="practice-time">~15 min</div>
+    </div>
+  </div>
+
+  <div class="practice-item" id="step-meditation" onclick="openMeditation()">
+    <div class="step-num">III</div>
+    <div class="practice-info">
+      <div class="practice-name">Meditation</div>
+      <div class="practice-desc">Sit together — same focus, same time</div>
+      <div class="practice-time">~15 min</div>
+    </div>
+  </div>
+
+  <div class="spacer-nav"></div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="showScreen('screen-home')">
+      <div class="nav-icon">🏡</div>
+      <div>Home</div>
+    </div>
+    <div class="nav-item" onclick="openShared()">
+      <div class="nav-icon">🤝</div>
+      <div>Together</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     READING SCREEN
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-reading">
+
+  <div class="reading-header">
+    <div class="back-row">
+      <button class="back-arrow" onclick="showScreen('screen-home')">←</button>
+      <span class="back-text">Back</span>
+    </div>
+    <div class="reading-step-label">Step I · Reading</div>
+    <div class="reading-title" id="reading-title">The Island Within</div>
+    <div class="reading-source" id="reading-source"></div>
+  </div>
+
+  <div class="reading-body scroll-area" id="reading-body">
+    <!-- Populated by JS -->
+  </div>
+
+  <div class="reading-reflection" style="margin-bottom: 20px;">
+    <div class="reflection-label">For you today</div>
+    <div class="reflection-text" id="reading-reflection"></div>
+  </div>
+
+  <button class="btn-primary" onclick="finishReading()" style="margin-bottom: 20px;">
+    I've read this ✓
+  </button>
+
+  <div class="spacer-nav"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     JOURNAL SCREEN
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-journal">
+
+  <div class="journal-header">
+    <div class="back-row">
+      <button class="back-arrow" onclick="showScreen('screen-home')">←</button>
+      <span class="back-text">Back</span>
+    </div>
+    <div class="reading-step-label">Step II · Journal</div>
+  </div>
+
+  <!-- Prompt -->
+  <div class="journal-prompt-box">
+    <div class="journal-prompt-label">Your prompt today</div>
+    <div class="journal-prompt-text" id="journal-prompt-text"></div>
+  </div>
+
+  <div class="journal-note" id="journal-note"></div>
+
+  <textarea
+    id="journal-entry"
+    placeholder="Begin writing here… there is no wrong answer."
+    oninput="autoSaveJournal()"
+    rows="8"
+  ></textarea>
+
+  <!-- Share section -->
+  <div class="share-section" style="padding: 0 20px; margin-top: 24px;">
+    <div class="share-label">Share with each other</div>
+    <div class="share-question" id="share-question"></div>
+    <textarea
+      class="share-excerpt"
+      id="share-excerpt"
+      placeholder="Write what you'd like them to read…"
+      rows="4"
+    ></textarea>
+    <button class="btn-ghost" id="copy-btn" onclick="copyShareMessage()" style="width:100%; margin: 10px 0 0;">
+      Copy to send
+    </button>
+  </div>
+
+  <button class="btn-primary" onclick="submitJournal()" style="margin-bottom:20px;">
+    Finish journaling ✓
+  </button>
+
+  <div class="spacer-nav"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MEDITATION SCREEN
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-meditation">
+
+  <div class="med-header">
+    <div class="back-row">
+      <button class="back-arrow" onclick="showScreen('screen-home')">←</button>
+      <span class="back-text">Back</span>
+    </div>
+    <div class="reading-step-label">Step III · Meditation</div>
+  </div>
+
+  <!-- Focus -->
+  <div class="med-focus-box">
+    <div class="med-focus-label">Meditate on this</div>
+    <div class="med-focus-text" id="med-focus-text"></div>
+    <div class="med-instruction" id="med-instruction"></div>
+  </div>
+
+  <!-- Duration selector -->
+  <div style="padding: 0 20px; margin-bottom: 4px;">
+    <div class="timer-duration-row">
+      <button class="dur-btn" data-mins="5"  onclick="setDuration(5)">5 min</button>
+      <button class="dur-btn selected" data-mins="15" onclick="setDuration(15)">15 min</button>
+      <button class="dur-btn" data-mins="20" onclick="setDuration(20)">20 min</button>
+      <button class="dur-btn" data-mins="30" onclick="setDuration(30)">30 min</button>
+    </div>
+  </div>
+
+  <!-- Timer -->
+  <div class="timer-container">
+    <div class="timer-ring-wrap">
+      <svg id="timer-svg" viewBox="0 0 200 200">
+        <circle class="timer-track"    cx="100" cy="100" r="90"/>
+        <circle class="timer-progress" cx="100" cy="100" r="90" id="timer-circle"/>
+      </svg>
+      <div class="timer-display">
+        <div class="timer-time" id="timer-time">15:00</div>
+        <div class="timer-phase" id="timer-phase">Ready</div>
+      </div>
+    </div>
+
+    <div class="timer-controls">
+      <button class="timer-btn-sm" onclick="toggleAmbient()" title="Ambient sound">🔔</button>
+      <button class="timer-btn-main" onclick="toggleTimer()" id="timer-play">▶</button>
+      <button class="timer-btn-sm" onclick="resetTimer()">↺</button>
+    </div>
+  </div>
+
+  <div style="text-align:center; font-size:12px; color:var(--moss); padding: 0 32px; line-height:1.6;">
+    Open this at the same time as each other.<br>You are sitting together in spirit.
+  </div>
+
+  <div class="spacer-nav"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TOGETHER / SHARED SCREEN
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-shared">
+
+  <div style="padding: 52px 28px 24px;">
+    <div class="back-row">
+      <button class="back-arrow" onclick="showScreen('screen-home')">←</button>
+      <span class="back-text">Back</span>
+    </div>
+    <div class="reading-step-label">Together</div>
+    <h2 style="font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:300; font-style:italic; color:var(--parchment); line-height:1.2;">
+      Two separate flames,<br>one warmth.
+    </h2>
+  </div>
+
+  <!-- Status -->
+  <div class="shared-status">
+    <div class="partner-row">
+      <div>
+        <div class="partner-name">Pavlo</div>
+        <div class="partner-status" id="your-status">Day 1 · 0/3 done</div>
+      </div>
+      <div><span class="status-dot"></span></div>
+    </div>
+    <div class="partner-row">
+      <div>
+        <div class="partner-name">Olivia</div>
+        <div class="partner-status" id="partner-status">Not yet online</div>
+      </div>
+      <div><span class="status-dot offline" id="partner-dot"></span></div>
+    </div>
+  </div>
+
+  <!-- Partner's shared excerpt -->
+  <div id="partner-excerpt-box" style="display:none;" class="share-msg-box">
+    <div class="theme-label">They chose to share</div>
+    <div class="share-msg-text" id="partner-excerpt-text"></div>
+    <div style="font-size:12px; color:var(--sage);" id="partner-excerpt-name"></div>
+  </div>
+
+  <div class="spacer-nav"></div>
+
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="showScreen('screen-home')">
+      <div class="nav-icon">🏡</div>
+      <div>Home</div>
+    </div>
+    <div class="nav-item active">
+      <div class="nav-icon">🤝</div>
+      <div>Together</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<!-- App scripts — data loaded first, then logic -->
+<script src="js/firebase.js"></script>
+<script src="js/content.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
