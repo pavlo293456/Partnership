@@ -122,7 +122,8 @@ function openReading() {
   const day  = AppState.currentDay;
   const data = DAYS[day] || DAYS[1];
 
-  document.getElementById('reading-theme').textContent  = data.theme;
+  const readingTheme = document.getElementById('reading-theme');
+  if (readingTheme) readingTheme.textContent = data.theme;
   document.getElementById('reading-title').textContent  = data.reading.title;
   document.getElementById('reading-source').textContent = data.reading.source;
   document.getElementById('reading-body').innerHTML     = data.reading.body;
