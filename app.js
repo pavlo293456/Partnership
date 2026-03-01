@@ -1,8 +1,27 @@
 // ── NAVIGATION ────────────────────────────────────────────────────
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const target = document.getElementById(id);
+  if (target) target.classList.add('active');
+  setNavState(id);
   window.scrollTo(0, 0);
+}
+
+function setNavState(activeScreenId) {
+  const homeActive = activeScreenId === 'screen-home';
+  const togetherActive = activeScreenId === 'screen-shared';
+
+  document.querySelectorAll('.bottom-nav').forEach(nav => {
+    const items = nav.querySelectorAll('.nav-item');
+    if (items[0]) items[0].classList.toggle('active', homeActive);
+    if (items[1]) items[1].classList.toggle('active', togetherActive);
+  });
+}
+
+function requireUser() {
+  if (AppState.currentUser) return true;
+  showScreen('screen-lock');
+  return false;
 }
 
 // ── PIN AUTH ──────────────────────────────────────────────────────
@@ -16,6 +35,8 @@ function selectUser(user) {
   document.getElementById('pin-user-label').textContent =
     user === 'pavlo' ? 'Pavlo' : 'Olivia';
   document.getElementById('pin-error').textContent = '';
+  const profile = document.getElementById('profile-selection');
+  if (profile) profile.style.display = 'none';
   document.querySelectorAll('.pin-screen').forEach(s => s.classList.remove('active'));
   document.getElementById('pin-entry').classList.add('active');
 }
@@ -62,6 +83,8 @@ function pinBack() {
   pendingUser = null;
   pinBuffer   = '';
   document.getElementById('pin-entry').classList.remove('active');
+  const profile = document.getElementById('profile-selection');
+  if (profile) profile.style.display = 'block';
 }
 
 // ── HOME SCREEN ───────────────────────────────────────────────────
@@ -95,6 +118,7 @@ function loadHomeScreen() {
 
 // ── READING SCREEN ────────────────────────────────────────────────
 function openReading() {
+  if (!requireUser()) return;
   const day  = AppState.currentDay;
   const data = DAYS[day] || DAYS[1];
 
@@ -112,6 +136,7 @@ function openReading() {
 }
 
 function finishReading() {
+  if (!requireUser()) return;
   markComplete(AppState.currentUser, AppState.currentDay, 'reading');
   loadHomeScreen();
   showScreen('screen-home');
@@ -119,6 +144,7 @@ function finishReading() {
 
 // ── JOURNAL SCREEN ────────────────────────────────────────────────
 function openJournal() {
+  if (!requireUser()) return;
   const day  = AppState.currentDay;
   const user = AppState.currentUser;
   const data = DAYS[day] || DAYS[1];
@@ -137,6 +163,7 @@ function openJournal() {
 }
 
 function autoSaveJournal() {
+  if (!requireUser()) return;
   const user = AppState.currentUser;
   const day  = AppState.currentDay;
   const text = document.getElementById('journal-entry').value;
@@ -144,6 +171,7 @@ function autoSaveJournal() {
 }
 
 function submitJournal() {
+  if (!requireUser()) return;
   const user    = AppState.currentUser;
   const day     = AppState.currentDay;
   const entry   = document.getElementById('journal-entry').value.trim();
@@ -170,6 +198,7 @@ let timerRunning    = false;
 let selectedMinutes = 15;
 
 function openMeditation() {
+  if (!requireUser()) return;
   const day  = AppState.currentDay;
   const data = DAYS[day] || DAYS[1];
 
@@ -315,6 +344,7 @@ function toggleAmbient() {
 
 // ── SHARED SCREEN ─────────────────────────────────────────────────
 function openShared() {
+  if (!requireUser()) return;
   const user    = AppState.currentUser;
   const partner = user === 'pavlo' ? 'olivia' : 'pavlo';
   const day     = AppState.currentDay;
@@ -359,6 +389,7 @@ function showPartnerExcerpt(partner, text) {
 
 // ── SHARE MESSAGE ─────────────────────────────────────────────────
 function copyShareMessage() {
+  if (!requireUser()) return;
   const excerpt = document.getElementById('share-excerpt').value.trim();
   const user    = AppState.currentUser === 'pavlo' ? 'Pavlo' : 'Olivia';
   const day     = AppState.currentDay;
@@ -368,11 +399,33 @@ function copyShareMessage() {
     ? `🌿 Day ${day} — ${data.theme}\n\n${user} shared:\n"${excerpt}"\n\n— from our partnership practice`
     : `🌿 ${user} completed Day ${day} of our partnership practice — "${data.theme}"`;
 
-  navigator.clipboard.writeText(msg).then(() => {
-    const btn = document.getElementById('copy-btn');
+  const btn = document.getElementById('copy-btn');
+
+  const markCopied = () => {
+    if (!btn) return;
     btn.textContent = 'Copied ✓';
     setTimeout(() => { btn.textContent = 'Copy to send'; }, 2000);
-  });
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(msg).then(markCopied).catch(() => {});
+    return;
+  }
+
+  const fallback = document.createElement('textarea');
+  fallback.value = msg;
+  fallback.setAttribute('readonly', '');
+  fallback.style.position = 'absolute';
+  fallback.style.left = '-9999px';
+  document.body.appendChild(fallback);
+  fallback.select();
+  try {
+    document.execCommand('copy');
+    markCopied();
+  } catch (e) {
+    alert('Copy failed. You can still manually copy your excerpt.');
+  }
+  document.body.removeChild(fallback);
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
@@ -380,6 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFirebase();
   updateTimerDisplay();
   updateTimerRing(1);
+  setNavState('screen-home');
 
   // Shake keyframe
   const style = document.createElement('style');
